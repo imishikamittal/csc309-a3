@@ -1,0 +1,72 @@
+Dental_Ishika_Raymond - Temporary Dental Staffing Platform
+CSC309 A3 - Installation Guide
+
+=== Environment ===
+
+Tested on Ubuntu 22.04 with Node.js v18+ and npm v9+.
+The backend and frontend can run on the same machine.
+
+=== Prerequisites ===
+
+  Node.js v18+  https://nodejs.org/
+  npm v9+
+
+All other dependencies are listed in backend/package.json and frontend/package.json and are installed automatically via npm install.
+
+Backend packages: express, cors, bcrypt, multer, socket.io, jsonwebtoken, express-jwt, uuid, prisma, @prisma/client, sqlite3, dotenv
+
+Frontend packages: react, react-dom, react-router-dom, axios, socket.io-client, vite, tailwindcss, postcss, autoprefixer
+
+=== Local Setup ===
+
+1. Backend
+
+  cd backend
+  npm install
+  npx prisma generate
+  npm run seed        # creates dev.db and populates demo data
+  node src/server.js 3000
+
+  The server listens on port 3000. Demo accounts (all passwords: 123123):
+    admin1@csc309.utoronto.ca
+    business1@csc309.utoronto.ca  (through business12@...)
+    regular1@csc309.utoronto.ca   (through regular22@...)
+
+2. Frontend
+
+  cd frontend
+  npm install
+  npm run dev
+
+  Starts on http://localhost:5173. The Vite dev server proxies API requests to localhost:3000 so no extra configuration is needed for local development.
+
+=== Deployment (Railway) ===
+
+The app is deployed as two services on Railway (https://railway.app) from a GitHub repository - one for the backend and one for the frontend. Both services point to the same repo but use different root directories.
+
+Backend service:
+  Root directory: backend
+  Start command:  npm start
+  Environment variable:
+    FRONTEND_URL=<deployed frontend URL>   (set after frontend is deployed)
+
+  After the backend deploys, open a shell on the service and run:
+    node prisma/seed.js
+
+Frontend service:
+  Root directory:  frontend
+  Build command:   npm run build
+  Start command:   npm run serve
+  Environment variable:
+    VITE_API_URL=<deployed backend URL>
+
+  Note: VITE_API_URL must be set before the first build - Vite bakes it into the compiled bundle at build time, not at runtime.
+
+After both services are running:
+  - Update FRONTEND_URL on the backend service to match the frontend URL
+
+SQLite note: Railway uses an ephemeral filesystem, so the database resets on each redeploy. Re-run `node prisma/seed.js` in the backend shell after any redeployment. Uploaded files (avatars, resumes) are also ephemeral.
+
+To reset the local database:
+  rm -f backend/prisma/dev.db backend/prisma/dev.db-journal
+  cd backend && npx prisma migrate dev --name init && npm run seed
