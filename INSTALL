@@ -61,6 +61,7 @@ Frontend service:
     VITE_API_URL=<deployed backend URL>
 
   Note: VITE_API_URL must be set before the first build - Vite bakes it into the compiled bundle at build time, not at runtime.
+  Note: frontend/nixpacks.toml is included to override Railway's install command to "npm install" instead of "npm ci", avoiding a lock file compatibility error with Railway's Linux build environment.
 
 After both services are running:
   - Update FRONTEND_URL on the backend service to match the frontend URL
