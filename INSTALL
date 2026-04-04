@@ -50,8 +50,8 @@ Backend service:
   Environment variable:
     FRONTEND_URL=<deployed frontend URL>   (set after frontend is deployed)
 
-  After the backend deploys, open a shell on the service and run:
-    node prisma/seed.js
+  The start command automatically runs prisma db push and seeds the database on each start,
+  so no manual database setup is required after deployment.
 
 Frontend service:
   Root directory:  frontend
@@ -66,8 +66,8 @@ Frontend service:
 After both services are running:
   - Update FRONTEND_URL on the backend service to match the frontend URL
 
-SQLite note: Railway uses an ephemeral filesystem, so the database resets on each redeploy. Re-run `node prisma/seed.js` in the backend shell after any redeployment. Uploaded files (avatars, resumes) are also ephemeral.
+SQLite note: Railway uses an ephemeral filesystem, so the database resets on each redeploy. The seed runs automatically on each start, so no manual action is needed after redeployment. Uploaded files (avatars, resumes) are also ephemeral and lost on redeploy.
 
 To reset the local database:
   rm -f backend/prisma/dev.db backend/prisma/dev.db-journal
-  cd backend && npx prisma migrate dev --name init && npm run seed
+  cd backend && npx prisma db push && npm run seed

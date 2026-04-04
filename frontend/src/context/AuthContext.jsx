@@ -1,4 +1,3 @@
-// Generated using Claude
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../api';
 
