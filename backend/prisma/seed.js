@@ -191,6 +191,11 @@ async function main() {
     { userId: users[19].id, ptId: ptRDT.id, status: 'approved', note: '8 years as registered dental technologist.' },
     { userId: users[20].id, ptId: ptSteri.id, status: 'approved', note: 'Steri tech, IPAC certified.' },
     { userId: users[21].id, ptId: ptOrtho.id, status: 'created', note: '' },
+    { userId: users[3].id, ptId: ptHygienist.id, status: 'submitted', note: 'Completed hygiene course at George Brown College.' },
+    { userId: users[5].id, ptId: ptHygienist.id, status: 'submitted', note: 'Hygienist certification in progress.' },
+    { userId: users[11].id, ptId: ptHygienist.id, status: 'submitted', note: 'Dual-certified technologist and hygienist.' },
+    { userId: users[14].id, ptId: ptSteri.id, status: 'revised', note: 'Resubmitting with updated IPAC certificate.' },
+    { userId: users[19].id, ptId: ptSteri.id, status: 'submitted', note: 'IPAC training completed last quarter.' },
   ];
 
   const quals = [];
@@ -253,6 +258,18 @@ async function main() {
     { bizId: businesses[2].id, ptId: ptDA2.id, salMin: 30, salMax: 38, start: future(6), end: future(14), status: 'open', note: '' },
     { bizId: businesses[3].id, ptId: ptReception.id, salMin: 23, salMax: 28, start: future(5), end: future(13), status: 'open', note: '' },
     { bizId: businesses[4].id, ptId: ptPerio.id, salMin: 44, salMax: 53, start: future(24), end: future(32), status: 'open', note: '' },
+    // Extra jobs for business1 to ensure My Jobs page has pagination (need 11+)
+    { bizId: businesses[0].id, ptId: ptHygienist.id, salMin: 41, salMax: 49, start: future(36), end: future(44), status: 'open', note: 'Weekend hygienist needed.' },
+    { bizId: businesses[0].id, ptId: ptDA1.id, salMin: 26, salMax: 31, start: future(48), end: future(56), status: 'open', note: '' },
+    { bizId: businesses[0].id, ptId: ptDA2.id, salMin: 32, salMax: 39, start: future(24), end: future(32), status: 'open', note: '' },
+    { bizId: businesses[0].id, ptId: ptReception.id, salMin: 23, salMax: 27, start: future(6), end: future(14), status: 'open', note: '' },
+    { bizId: businesses[0].id, ptId: ptSteri.id, salMin: 21, salMax: 26, start: future(12), end: future(20), status: 'open', note: '' },
+    { bizId: businesses[0].id, ptId: ptPerio.id, salMin: 47, salMax: 56, start: future(72), end: future(80), status: 'open', note: '' },
+    { bizId: businesses[0].id, ptId: ptHygienist.id, salMin: 39, salMax: 46, start: future(96), end: future(104), status: 'open', note: '' },
+    { bizId: businesses[5].id, ptId: ptHygienist.id, salMin: 40, salMax: 47, start: future(36), end: future(44), status: 'open', note: '' },
+    { bizId: businesses[6].id, ptId: ptHygienist.id, salMin: 38, salMax: 45, start: future(48), end: future(56), status: 'open', note: '' },
+    { bizId: businesses[7].id, ptId: ptHygienist.id, salMin: 41, salMax: 48, start: future(24), end: future(32), status: 'open', note: '' },
+    { bizId: businesses[8].id, ptId: ptHygienist.id, salMin: 39, salMax: 46, start: future(72), end: future(80), status: 'open', note: '' },
   ];
 
   const jobs = [];
