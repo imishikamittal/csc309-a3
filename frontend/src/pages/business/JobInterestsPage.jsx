@@ -44,7 +44,7 @@ export default function JobInterestsPage() {
         const estWait = err.response?.data?.estimatedWait;
         setError(`Cannot start negotiation. ${estWait ? `Est. wait: ${Math.ceil(estWait / 60)} min.` : 'Try again later.'}`);
       } else if (status === 403) {
-        setError('Mutual interest required.');
+        setError(err.response?.data?.error || 'Cannot start negotiation - the candidate may no longer be discoverable for this job.');
       } else {
         setError('Failed to start negotiation.');
       }

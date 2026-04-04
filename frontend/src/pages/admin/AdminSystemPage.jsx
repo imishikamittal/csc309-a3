@@ -4,6 +4,7 @@ import api from '../../api';
 
 function ConfigCard({ title, description, field, unit, endpoint, defaultVal }) {
   const [value, setValue] = useState('');
+  const [currentValue, setCurrentValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
@@ -17,7 +18,9 @@ function ConfigCard({ title, description, field, unit, endpoint, defaultVal }) {
     setLoading(true);
     try {
       const res = await api.patch(endpoint, { [field]: num });
-      setSuccess(`Updated to ${res.data[field]} ${unit}.`);
+      const updated = res.data[field];
+      setCurrentValue(updated);
+      setSuccess(`Updated to ${updated} ${unit}.`);
       setValue('');
     } catch (err) {
       setError(err.response?.data?.error || 'Update failed.');
@@ -28,9 +31,14 @@ function ConfigCard({ title, description, field, unit, endpoint, defaultVal }) {
 
   return (
     <div className="card">
-      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{title}</h3>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{description}</p>
-      <p className="text-xs text-gray-400 mb-3">Default: {defaultVal} {unit}</p>
+      <div className="flex items-start justify-between gap-4 mb-1">
+        <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
+        {currentValue !== null && (
+          <span className="badge-teal shrink-0">Current: {currentValue} {unit}</span>
+        )}
+      </div>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{description}</p>
+      <p className="text-xs text-gray-400 mb-3">Default: {defaultVal} {unit}. Changes apply immediately but reset on server restart.</p>
       <form onSubmit={handleSubmit} className="flex gap-2 items-start">
         <div className="flex-1">
           <div className="flex gap-2">
@@ -60,7 +68,7 @@ export default function AdminSystemPage() {
     <div className="max-w-2xl mx-auto">
       <h1 className="page-title">System Configuration</h1>
       <p className="text-gray-500 dark:text-gray-400 mb-6 -mt-3">
-        Changes apply immediately but are not persisted across server restarts.
+        Adjust system-wide settings. All changes take effect immediately.
       </p>
 
       <div className="space-y-4">

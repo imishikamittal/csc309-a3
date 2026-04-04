@@ -25,6 +25,7 @@ export default function AdminPositionTypesPage() {
   const limit = 10;
 
   const fetchPositions = useCallback(async () => {
+    setActionError('');
     setLoading(true);
     try {
       const params = { page, limit };
@@ -95,6 +96,7 @@ export default function AdminPositionTypesPage() {
   };
 
   const toggleHidden = async (pt) => {
+    setActionError('');
     setActionLoading(pt.id);
     try {
       await api.patch(`/position-types/${pt.id}`, { hidden: !pt.hidden });

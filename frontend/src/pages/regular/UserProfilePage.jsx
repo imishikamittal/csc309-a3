@@ -16,6 +16,7 @@ export default function UserProfilePage() {
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
+  const [avatarTs, setAvatarTs] = useState(Date.now());
 
   const toggleAvailability = async () => {
     setAvailError('');
@@ -44,6 +45,7 @@ export default function UserProfilePage() {
       await api.put(endpoint, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       setUploadSuccess(`${uploadSection === 'avatar' ? 'Avatar' : 'Resume'} uploaded successfully!`);
       setFile(null);
+      if (uploadSection === 'avatar') setAvatarTs(Date.now());
       await refreshUser();
     } catch (err) {
       setUploadError(err.response?.data?.error || 'Upload failed. Check file type and size.');
@@ -64,13 +66,31 @@ export default function UserProfilePage() {
       <div className="card">
         <div className="flex items-start gap-6">
           <div className="flex flex-col items-center gap-2">
-            <Avatar src={user.avatar} name={`${user.first_name} ${user.last_name}`} size="xl" />
+            <Avatar
+              src={user.avatar ? `${user.avatar}?t=${avatarTs}` : null}
+              name={`${user.first_name} ${user.last_name}`}
+              size="xl"
+            />
             <button
               onClick={() => setUploadSection(uploadSection === 'avatar' ? '' : 'avatar')}
               className="text-xs link"
             >
               {uploadSection === 'avatar' ? 'Cancel' : 'Change avatar'}
             </button>
+            {user.avatar && uploadSection !== 'avatar' && (
+              <button
+                onClick={async () => {
+                  try {
+                    await api.patch('/users/me', { avatar: null });
+                    setAvatarTs(Date.now());
+                    await refreshUser();
+                  } catch {}
+                }}
+                className="text-xs text-red-500 hover:underline"
+              >
+                Remove avatar
+              </button>
+            )}
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
